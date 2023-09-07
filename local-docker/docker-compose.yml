@@ -10,6 +10,8 @@ services:
       - 80:17301
     volumes:
       - ../app:/code/app
+    networks:
+      - moong_project_net
   mysql:
     image: mysql:8.0
     restart: always
@@ -24,3 +26,8 @@ services:
       - --collation-server=utf8mb4_unicode_ci
     volumes:
       - ${MYSQL_DATA_DIRECTORY}:/var/lib/mysql
+    networks:
+      - moong_project_net
+networks:
+  moong_project_net:
+    driver: bridge
