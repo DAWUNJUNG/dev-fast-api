@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: uvicorn app.main:app --host 0.0.0.0 --port 17080 --reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 17301 --reload
     ports:
       - 80:17301
     volumes:
