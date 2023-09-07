@@ -3,7 +3,7 @@ version: "3.7"
 services:
   moong_api:
     build:
-      context: ..
+      context: .
       dockerfile: Dockerfile
     command: uvicorn app.main:app --host 0.0.0.0 --port 17080 --reload
     ports:
