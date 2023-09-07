@@ -3,19 +3,19 @@ version: "3.7"
 services:
   moong_api:
     build:
-      context: .
+      context: ..
       dockerfile: Dockerfile
     command: uvicorn app.main:app --host 0.0.0.0 --port 17080 --reload
     ports:
-      - 80:17080
+      - 80:17301
     volumes:
-      - ./app:/code/app
+      - ../app:/code/app
   mysql:
     image: mysql:8.0
     restart: always
     container_name: mysql
     ports:
-      - "3306:3306"
+      - "3306:17305"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       TZ: Asia/Seoul
@@ -23,4 +23,4 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
     volumes:
-      - /home/db_data/mysql/data/:/var/lib/mysql
+      - ${MYSQL_DATA_DIRECTORY}:/var/lib/mysql
