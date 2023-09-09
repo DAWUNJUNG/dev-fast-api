@@ -1,23 +1,23 @@
 version: "3.7"
 
 services:
-  moong_api:
+  dev-fast-api:
     build:
       context: .
       dockerfile: Dockerfile
     command: uvicorn app.main:app --host 0.0.0.0 --port 17301 --reload
     ports:
-      - 80:17301
+      - 27080:17301
     volumes:
       - ../app:/code/app
     networks:
-      - moong_project_net
-  mysql:
+      - cloud_api
+  mysql-8:
     image: mysql:8.0
     restart: always
-    container_name: mysql
+    container_name: mysql-8
     ports:
-      - "3306:17305"
+      - "27085:17305"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       TZ: Asia/Seoul
@@ -27,7 +27,21 @@ services:
     volumes:
       - ${MYSQL_DATA_DIRECTORY}:/var/lib/mysql
     networks:
-      - moong_project_net
+      - cloud_api
+  oracle-18c:
+    image: pvargacl/oracle-xe-18.4.0
+    container_name: oracle-18c
+    restart: unless-stopped
+    ports:
+      - 27086:17306
+      - 27087:17307
+    volumes:
+      - ${ORACLE_DATA_DIRECTORY}:/opt/oracle/oradata
+    environment:
+      - ORACLE_PWD=${ORACLE_ROOT_PASSWORD}
+      - ORACLE_CHARACTERSET=AL32UTF8
+    networks:
+      - cloud_api
 networks:
-  moong_project_net:
+  cloud_api:
     driver: bridge
