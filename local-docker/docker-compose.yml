@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     command: uvicorn app.main:app --host 0.0.0.0 --port 17301 --reload
     ports:
       - 27080:17301
@@ -17,7 +18,7 @@ services:
     restart: always
     container_name: mysql-8
     ports:
-      - "27085:17305"
+      - ${MYSQL_PORT}:3306
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       TZ: Asia/Seoul
@@ -31,17 +32,18 @@ services:
   oracle-18c:
     image: pvargacl/oracle-xe-18.4.0
     container_name: oracle-18c
-    restart: unless-stopped
+    restart: always
     ports:
-      - 27086:17306
-      - 27087:17307
+      - ${ORACLE_PORT1}:1521
+      - ${ORACLE_PORT2}:5500
     volumes:
       - ${ORACLE_DATA_DIRECTORY}:/opt/oracle/oradata
     environment:
+      - ORACLE_SID=${ORACLE_ROOT_UID}
       - ORACLE_PWD=${ORACLE_ROOT_PASSWORD}
       - ORACLE_CHARACTERSET=AL32UTF8
     networks:
       - cloud_api
 networks:
   cloud_api:
-    driver: bridge
+     driver: bridge
